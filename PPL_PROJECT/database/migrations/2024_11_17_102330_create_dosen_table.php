@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('dosen', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('title');
+            $table->string('nip')->unique();
+            $table->string('email')->unique();
+            $table->foreignId('prodi_id')->constrained('prodi')->onDelete('cascade');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

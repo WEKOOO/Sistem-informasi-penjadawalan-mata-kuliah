@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id();
+            $table->string('nama');
+            $table->string('npm')->unique();
+            $table->string('email')->unique();
+            $table->foreignId('prodi_id')->constrained('prodi')->onDelete('cascade');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

@@ -13,8 +13,13 @@ return new class extends Migration
     {
         Schema::create('matakuliah', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_matakuliah');
+            $table->string('kode_matakuliah')->unique();
+            $table->integer('sks');
+            $table->integer('semester');
+            $table->foreignId('prodi_id')->constrained('prodi')->onDelete('cascade');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

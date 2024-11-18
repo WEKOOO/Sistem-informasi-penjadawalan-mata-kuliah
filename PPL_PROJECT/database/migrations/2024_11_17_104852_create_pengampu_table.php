@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('pengampu', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('dosen_id')->constrained('dosen')->onDelete('cascade');
+            $table->foreignId('matakuliah_id')->constrained('matakuliah')->onDelete('cascade');
+            $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade');
+            $table->string('tahun_akademik');
             $table->timestamps();
         });
     }
+        
 
     /**
      * Reverse the migrations.
