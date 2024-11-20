@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dosen', function (Blueprint $table) {
+        Schema::create('pengambilan_mk', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('nidn')->unique();
-            $table->string('email')->unique();
-            $table->foreignId('prodi_id')->constrained('prodi')->onDelete('cascade');
+            $table->string('semester');
+            $table->integer('kapasitas');
             $table->timestamps();
-        });        
+        });
     }
 
     /**
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dosen');
+        //
     }
 };
