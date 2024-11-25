@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('jam', function (Blueprint $table) {
             $table->id();
-            $table->time('jam_range');
-            $table->time('jam_shalat');
+            $table->string('jam_mulai');
+            $table->string('jam_selesai');
+            $table->foreignId('matakuliah_id')->constrained('matakuliah')->onDelete('cascade');
+            $table->string('waktu_shalat')->nullable();
             $table->timestamps();
         });        
     }

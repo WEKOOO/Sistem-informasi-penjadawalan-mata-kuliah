@@ -3,67 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dosen;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 
 class DosenController extends Controller
 {
-    // Menampilkan daftar semua dosen
+    // Tampilkan data dosen
     public function index()
     {
-        $dosen = Dosen::all();
+        $dosen = Dosen::with('prodi')->get(); // Ambil data dosen dengan relasi prodi
         return view('dosen.index', compact('dosen'));
     }
 
-    // Menampilkan form untuk menambah dosen baru
+    // Form untuk tambah data dosen
     public function create()
     {
-        return view('dosen.create');
+        $prodi = Prodi::all(); // Ambil semua data prodi
+        return view('dosen.create', compact('prodi'));
     }
 
-    // Menyimpan dosen baru ke database
+    // Simpan data dosen
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nidn' => 'required|string|max:255|unique:dosen',
-            'email' => 'required|email|unique:dosen',
-            'prodi_id' => 'required|integer',
+            'nidn' => 'required|unique:dosen,nidn',
+            'nama' => 'required',
+            'email' => 'required|email|unique:dosen,email',
+            'prodi_id' => 'required|exists:prodi,id',
         ]);
 
         Dosen::create($request->all());
-
-        return redirect()->route('dosen.index')->with('success', 'Dosen berhasil ditambahkan.');
+        return redirect()->route('dosen.index')->with('success', 'Data dosen berhasil ditambahkan.');
     }
 
-    // Menampilkan form untuk mengedit dosen
-    public function edit($id)
+    // Form untuk edit data dosen
+    public function edit(Dosen $dosen)
     {
-        $dosen = Dosen::findOrFail($id);
-        return view('dosen.edit', compact('dosen'));
+        $prodi = Prodi::all(); // Ambil semua data prodi
+        return view('dosen.edit', compact('dosen', 'prodi'));
     }
 
-    // Memperbarui data dosen di database
-    public function update(Request $request, $id)
+    // Update data dosen
+    public function update(Request $request, Dosen $dosen)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nidn' => 'required|string|max:255|unique:dosen,nidn,' . $id,
-            'email' => 'required|email|unique:dosen,email,' . $id,
-            'prodi_id' => 'required|integer',
+            'nidn' => 'required|unique:dosen,nidn,' . $dosen->id,
+            'nama' => 'required',
+            'email' => 'required|email|unique:dosen,email,' . $dosen->id,
+            'prodi_id' => 'required|exists:prodi,id',
         ]);
 
-        $dosen = Dosen::findOrFail($id);
         $dosen->update($request->all());
-
-        return redirect()->route('dosen.index')->with('success', 'Dosen berhasil diperbarui.');
+        return redirect()->route('dosen.index')->with('success', 'Data dosen berhasil diperbarui.');
     }
 
-    // Menghapus dosen dari database
-    public function destroy($id)
+    // Hapus data dosen
+    public function destroy(Dosen $dosen)
     {
-        $dosen = Dosen::findOrFail($id);
         $dosen->delete();
-
-        return redirect()->route('dosen.index')->with('success', 'Dosen berhasil dihapus.');
+        return redirect()->route('dosen.index')->with('success', 'Data dosen berhasil dihapus.');
     }
 }
+

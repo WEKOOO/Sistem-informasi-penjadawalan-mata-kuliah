@@ -26,4 +26,9 @@ class Kelas extends Model
     {
         return $this->belongsTo(Prodi::class, 'prodi_id');
     }
+
+    public function jadwalKuliah()
+    {
+        return $this->hasMany(JadwalKuliah::class, 'kelas_id');
+    }
 }

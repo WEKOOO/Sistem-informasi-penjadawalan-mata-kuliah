@@ -3,68 +3,109 @@
 namespace App\Http\Controllers;
 
 use App\Models\JadwalKuliah;
+use App\Models\Pengampu;
+use App\Models\Ruang;
+use App\Models\Hari;
+use App\Models\Jam;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 
 class JadwalKuliahController extends Controller
 {
-    // Menampilkan daftar jadwal kuliah
     public function index()
     {
-        $jadwalKuliah = JadwalKuliah::with(['matakuliah', 'kelas', 'ruang', 'hari', 'jam', 'dosen'])->get();
-        return view('jadwalkuliah.index', compact('jadwalKuliah'));
+        $jadwal = JadwalKuliah::with(['pengampu.matakuliah', 'pengampu.dosen', 'ruang', 'hari', 'jam', 'kelas'])
+            ->get();
+        return view('jadwal.index', compact('jadwal'));
     }
 
-    // Menampilkan form untuk menambah jadwal kuliah
     public function create()
     {
-        return view('jadwalkuliah.create');
+        $pengampu = Pengampu::with(['matakuliah', 'dosen'])->get();
+        $ruang = Ruang::all();
+        $hari = Hari::all();
+        $jam = Jam::all();
+        $kelas = Kelas::all();
+        
+        return view('jadwal.create', compact('pengampu', 'ruang', 'hari', 'jam', 'kelas'));
     }
 
-    // Menyimpan jadwal kuliah yang baru ditambahkan
-    public function store(Request $request)
+    public function generateJadwal(Request $request)
     {
-        $request->validate([
-            'matakuliah_id' => 'required|exists:matakuliah,id',
-            'kelas_id' => 'required|exists:kelas,id',
-            'ruang_id' => 'required|exists:ruang,id',
-            'hari_id' => 'required|exists:hari,id',
-            'jam_id' => 'required|exists:jam,id',
-            'dosen_id' => 'required|exists:dosen,id',
-        ]);
+        // Hapus jadwal yang ada untuk tahun akademik yang sama
+        JadwalKuliah::where('tahun_akademik', $request->tahun_akademik)->delete();
 
-        JadwalKuliah::create($request->all());
-        return redirect()->route('jadwalkuliah.index')->with('success', 'Jadwal kuliah berhasil ditambahkan.');
-    }
+        $pengampuList = Pengampu::with(['matakuliah', 'dosen'])
+            ->where('tahun_akademik', $request->tahun_akademik)
+            ->get();
+        
+        $ruangList = Ruang::all();
+        $hariList = Hari::all();
+        $jamList = Jam::all();
+        $kelasList = Kelas::all();
 
-    // Menampilkan form untuk mengedit jadwal kuliah
-    public function edit($id)
-    {
-        $jadwalKuliah = JadwalKuliah::findOrFail($id);
-        return view('jadwalkuliah.edit', compact('jadwalKuliah'));
-    }
+        foreach ($pengampuList as $pengampu) {
+            $jadwalTersedia = false;
+            
+            // Hitung durasi waktu berdasarkan SKS
+            $sks = $pengampu->matakuliah->sks; // Misal, ambil SKS dari model matakuliah
+            $durasi = $sks * 50; // Hitung durasi dalam menit
+            $jamMulai = null;
 
-    // Memperbarui jadwal kuliah yang sudah ada
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'matakuliah_id' => 'required|exists:matakuliah,id',
-            'kelas_id' => 'required|exists:kelas,id',
-            'ruang_id' => 'required|exists:ruang,id',
-            'hari_id' => 'required|exists:hari,id',
-            'jam_id' => 'required|exists:jam,id',
-            'dosen_id' => 'required|exists:dosen,id',
-        ]);
+            foreach ($hariList as $hari) {
+                if ($jadwalTersedia) break;
+                
+                foreach ($jamList as $jam) {
+                    // Skip jika waktu shalat
+                    if ($jam->waktu_shalat) continue;
 
-        $jadwalKuliah = JadwalKuliah::findOrFail($id);
-        $jadwalKuliah->update($request->all());
-        return redirect()->route('jadwalkuliah.index')->with('success', 'Jadwal kuliah berhasil diperbarui.');
-    }
+                    // Hitung waktu selesai
+                    $jamMulai = $jam->id; // Asumsikan jam ini adalah jam mulai
+                    $jamSelesai = $jam->id + ($durasi / 60); // Menghitung jam selesai (asumsi jam dalam format jam ke-1, jam ke-2, dst.)
 
-    // Menghapus jadwal kuliah
-    public function destroy($id)
-    {
-        $jadwalKuliah = JadwalKuliah::findOrFail($id);
-        $jadwalKuliah->delete();
-        return redirect()->route('jadwalkuliah.index')->with('success', 'Jadwal kuliah berhasil dihapus.');
-    }
+                    foreach ($ruangList as $ruang) {
+                        // Cek kapasitas ruangan
+                        if ($ruang->kapasitas < $pengampu->matakuliah->kapasitas_minimum) {
+                            continue;
+                        }
+                        
+                        // Cek bentrokan jadwal
+                        $bentrok = JadwalKuliah::where('hari_id', $hari->id)
+                            ->where('jam_id', $jamMulai)
+                            ->where(function($query) use ($ruang, $pengampu, $jamSelesai) {
+                                $query->where('ruang_id', $ruang->id)
+                                    ->orWhere(function($q) use ($pengampu, $jamSelesai) {
+                                        $q->where('pengampu_id', $pengampu->id)
+                                        ->where('jam_id', '<=', $jamSelesai);
+                                    });
+                            })
+                            ->exists();
+                            
+                        if (!$bentrok) {
+                            foreach ($kelasList as $kelas) {
+                                if ($kelas->prodi_id == $pengampu->matakuliah->prodi_id) {
+                                    JadwalKuliah::create([
+                                        'pengampu_id' => $pengampu->id,
+                                        'ruang_id' => $ruang->id,
+                                        'hari_id' => $hari->id,
+                                        'jam_id' => $jamMulai, // Menggunakan jam mulai
+                                        'kelas_id' => $kelas->id,
+                                        'tahun_akademik' => $request->tahun_akademik
+                                    ]);
+                                    
+                                    $jadwalTersedia = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if ($jadwalTersedia) break;
+                    }
+                    if ($jadwalTersedia) break;
+                }
+            }
+        }
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil digenerate!');
+}
 }

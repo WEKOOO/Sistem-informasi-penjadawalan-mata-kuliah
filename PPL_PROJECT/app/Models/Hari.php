@@ -11,4 +11,9 @@ class Hari extends Model
 
     protected $table = 'hari';
     protected $fillable = ['nama_hari'];
+
+    public function jadwalKuliah()
+    {
+        return $this->hasMany(JadwalKuliah::class, 'hari_id');
+    }
 }

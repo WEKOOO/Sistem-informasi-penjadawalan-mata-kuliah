@@ -9,48 +9,33 @@ class JadwalKuliah extends Model
 {
     use HasFactory;
 
-    protected $table = 'jadwalkuliah';
-    protected $fillable = [
-        'matakuliah_id',
-        'kelas_id',
-        'ruang_id',
-        'hari_id',
-        'jam_id',
-        'dosen_id'
-    ];
+    
+    protected $table = 'jadwal_kuliah';
+    protected $fillable = ['pengampu_id', 'ruang_id', 'hari_id', 'jam_id', 'kelas_id', 'tahun_akademik'];
 
-    // Relasi ke model Matakuliah
-    public function matakuliah()
+    public function pengampu()
     {
-        return $this->belongsTo(Matakuliah::class, 'matakuliah_id');
+        return $this->belongsTo(Pengampu::class);
     }
 
-    // Relasi ke model Kelas
-    public function kelas()
-    {
-        return $this->belongsTo(Kelas::class, 'kelas_id');
-    }
-
-    // Relasi ke model Ruang
     public function ruang()
     {
-        return $this->belongsTo(Ruang::class, 'ruang_id');
+        return $this->belongsTo(Ruang::class);
     }
 
-    // Relasi ke model Hari
     public function hari()
     {
-        return $this->belongsTo(Hari::class, 'hari_id');
+        return $this->belongsTo(Hari::class);
     }
 
-    // Relasi ke model Jam
     public function jam()
     {
-        return $this->belongsTo(Jam::class, 'jam_id');
+        return $this->belongsTo(Jam::class);
     }
-    public function dosen()
+
+    public function kelas()
     {
-        return $this->belongsTo(Dosen::class, 'dosen_id');
+        return $this->belongsTo(Kelas::class);
     }
 }
   

@@ -10,8 +10,8 @@ class RuangController extends Controller
     // Menampilkan daftar ruang
     public function index()
     {
-        $ruangs = Ruang::all();
-        return view('ruang.index', compact('ruangs'));
+        $ruang = Ruang::all();
+        return view('ruang.index', compact('ruang'));
     }
 
     // Menampilkan form untuk membuat ruang baru

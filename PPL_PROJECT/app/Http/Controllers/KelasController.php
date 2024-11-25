@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelas;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
@@ -17,7 +18,8 @@ class KelasController extends Controller
     // Menampilkan form untuk menambahkan kelas baru
     public function create()
     {
-        return view('kelas.create');
+        $prodi = Prodi::all(); // Ambil semua data prodi
+        return view('kelas.create', compact('prodi'));
     }
 
     // Menyimpan kelas baru ke database
@@ -32,16 +34,13 @@ class KelasController extends Controller
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil ditambahkan.');
     }
 
-    // Menampilkan detail kelas
-    public function show(Kelas $kelas)
-    {
-        return view('kelas.show', compact('kelas'));
-    }
+    
 
     // Menampilkan form untuk mengedit kelas
     public function edit(Kelas $kelas)
     {
-        return view('kelas.edit', compact('kelas'));
+        $prodi = Prodi::all(); // Ambil semua data prodi
+        return view('kelas.edit', compact('kelas', 'prodi'));
     }
 
     // Memperbarui data kelas
@@ -53,8 +52,9 @@ class KelasController extends Controller
         ]);
 
         $kelas->update($request->all());
-        return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diperbarui.');
+        return redirect()->route('kelas.index')->with('success', 'Data kelas berhasil diperbarui.');
     }
+
 
     // Menghapus kelas
     public function destroy(Kelas $kelas)
