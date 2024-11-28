@@ -1,28 +1,40 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
-
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
-    {
-        return view('auth.login');
-    }
-
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Validasi input login
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
+        // Autentikasi
         if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard');
+            $request->session()->regenerate();
+
+            // Redirect berdasarkan role
+            $role = Auth::user()->role;
+            switch ($role) {
+                case 'admin':
+                    return redirect('/dashboard/admin');
+                case 'dosen':
+                    return redirect('/dashboard/dosen');
+                case 'mahasiswa':
+                    return redirect('/dashboard/mahasiswa');
+                default:
+                    return redirect('/')->withErrors(['login' => 'Role tidak dikenali.']);
+            }
         }
 
+        // Jika login gagal
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'login' => 'Email atau password salah.',
         ]);
     }
 }

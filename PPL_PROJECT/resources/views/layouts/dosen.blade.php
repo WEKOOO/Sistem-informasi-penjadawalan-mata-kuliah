@@ -133,17 +133,8 @@
     <div class="layout">
         <!-- Sidebar -->
         <div class="sidebar">
-            <a href="dashboard" class="sidebar-link {{ request()->is('dashboard') ? 'active' : '' }}" id="dashboard-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
-            <a href="matakuliah" class="sidebar-link {{ request()->is('matakuliah') ? 'active' : '' }}" id="matakuliah-link"><i class="bi bi-book"></i> Mata Kuliah</a>
-            <a href="dosen" class="sidebar-link {{ request()->is('dosen') ? 'active' : '' }}" id="dosen-link"><i class="bi bi-person"></i> Dosen</a>
-            <a href="prodi" class="sidebar-link {{ request()->is('prodi') ? 'active' : '' }}" id="prodi-link"><i class="bi bi-diagram-2"></i> Program Studi</a>
-            <a href="ruang" class="sidebar-link {{ request()->is('ruang') ? 'active' : '' }}" id="ruang-link"><i class="bi bi-building"></i> Ruangan</a>
-            <a href="kelas" class="sidebar-link {{ request()->is('kelas') ? 'active' : '' }}" id="kelas-link"><i class="bi bi-person-lines-fill"></i> Kelas</a>
-            <a href="jam" class="sidebar-link {{ request()->is('jam') ? 'active' : '' }}" id="jam-link"><i class="bi bi-clock"></i> Waktu</a>
-            <a href="pengampu" class="sidebar-link {{ request()->is('pengampu') ? 'active' : '' }}" id="pengampu-link"><i class="bi bi-person-check"></i> Pengampu</a>
-            <a href="#"><i class="bi bi-people"></i> Mahasiswa</a>
-
-            <a href="jadwal" class="buat-jadwal"><i class="bi bi-calendar-event"></i> Buat Jadwal</a>
+            <a href="dashboard-dosen" class="sidebar-link {{ request()->is('dashboard') ? 'active' : '' }}" id="dashboard-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="jadwaldosen" class="buat-jadwal"><i class="bi bi-calendar-event"></i> Buat Jadwal</a>
         </div>
 
         <!-- Main Content -->
