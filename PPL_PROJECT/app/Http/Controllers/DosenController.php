@@ -29,7 +29,6 @@ class DosenController extends Controller
             'nidn' => 'required|unique:dosen,nidn',
             'nama' => 'required',
             'email' => 'required|email|unique:dosen,email',
-            'prodi_id' => 'required|exists:prodi,id',
         ]);
 
         Dosen::create($request->all());
@@ -50,7 +49,6 @@ class DosenController extends Controller
             'nidn' => 'required|unique:dosen,nidn,' . $dosen->id,
             'nama' => 'required',
             'email' => 'required|email|unique:dosen,email,' . $dosen->id,
-            'prodi_id' => 'required|exists:prodi,id',
         ]);
 
         $dosen->update($request->all());

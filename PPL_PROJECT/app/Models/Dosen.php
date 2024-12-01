@@ -14,7 +14,6 @@ class Dosen extends Model
         'nama',
         'nidn',
         'email',
-        'prodi_id',
     ];
 
     // Relasi ke model Matakuliah

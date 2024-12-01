@@ -36,9 +36,9 @@
 
                         <div class="mb-3">
                             <label for="nama" class="form-label">Nama Dosen</label>
-                            <input type="text" class="form-control @error('nama') is-invalid @enderror" 
-                                   id="nama" name="nama" 
-                                   value="{{ old('nama', $dosen->nama) }}" 
+                            <input type="text" class="form-control @error('nama') is-invalid @enderror"
+                                   id="nama" name="nama"
+                                   value="{{ old('nama', $dosen->nama) }}"
                                    placeholder="Masukkan nama dosen">
                             @error('nama')
                                 <div class="invalid-feedback">
@@ -49,9 +49,9 @@
 
                         <div class="mb-3">
                             <label for="nidn" class="form-label">Nidn</label>
-                            <input type="text" class="form-control @error('nidn') is-invalid @enderror" 
-                                   id="nidn" name="nidn" 
-                                   value="{{ old('nidn', $dosen->nidn) }}" 
+                            <input type="text" class="form-control @error('nidn') is-invalid @enderror"
+                                   id="nidn" name="nidn"
+                                   value="{{ old('nidn', $dosen->nidn) }}"
                                    placeholder="Masukkan Nidn Dosen">
                             @error('nidn')
                                 <div class="invalid-feedback">
@@ -62,30 +62,11 @@
 
                         <div class="mb-3">
                             <label for="email" class="form-label">email</label>
-                            <input type="text" class="form-control @error('email') is-invalid @enderror" 
-                                    id="email" name="email" 
-                                    value="{{ old('email', $dosen->email) }}" 
+                            <input type="text" class="form-control @error('email') is-invalid @enderror"
+                                    id="email" name="email"
+                                    value="{{ old('email', $dosen->email) }}"
                                     placeholder="Masukkan email dosen">
                             @error('email')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="prodi_id" class="form-label">Program Studi</label>
-                            <select class="form-select @error('prodi_id') is-invalid @enderror" 
-                                    id="prodi_id" name="prodi_id">
-                                <option value="">Pilih Program Studi</option>
-                                @foreach($prodi as $p)
-                                    <option value="{{ $p->id }}" 
-                                        {{ old('prodi_id', $dosen->prodi_id) == $p->id ? 'selected' : '' }}>
-                                        {{ $p->nama_prodi }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('prodi_id')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -109,44 +90,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
-        
+
         form.addEventListener('submit', function(e) {
             let isValid = true;
-            
+
             // Validasi Nama
             const nama = document.getElementById('nama');
             if (!nama.value.trim()) {
                 setInvalid(nama, 'Nama wajib diisi');
                 isValid = false;
             }
-            
+
             // Validasi Nidn
             const nidn = document.getElementById('nidn');
             if (!nidn.value.trim()) {
                 setInvalid(nidn, 'NIDN wajib diisi');
                 isValid = false;
             }
-            
+
             // Validasi email
             const email = document.getElementById('email');
             if (!email.value.trim) {
                 setInvalid(email, 'email wajib diisi');
                 isValid = false;
             }
-            
-            
-            // Validasi Program Studi
-            const prodi = document.getElementById('prodi_id');
-            if (!prodi.value) {
-                setInvalid(prodi, 'Program studi wajib dipilih');
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                e.preventDefault();
-            }
-        });
-        
+
+
         function setInvalid(element, message) {
             element.classList.add('is-invalid');
             const feedback = element.nextElementSibling;
@@ -154,7 +123,7 @@
                 feedback.textContent = message;
             }
         }
-        
+
         // Reset validation on input
         const inputs = form.querySelectorAll('input, select');
         inputs.forEach(input => {
