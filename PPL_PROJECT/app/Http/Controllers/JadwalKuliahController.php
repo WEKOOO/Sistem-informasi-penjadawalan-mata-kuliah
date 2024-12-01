@@ -15,7 +15,7 @@ class JadwalKuliahController extends Controller
     public function index()
     {
         $jadwal = JadwalKuliah::with(['pengampu.matakuliah', 'pengampu.dosen', 'ruang', 'hari', 'jam', 'kelas'])
-            ->get();
+            ->paginate(10);
         return view('jadwal.index', compact('jadwal'));
     }
 
@@ -28,6 +28,43 @@ class JadwalKuliahController extends Controller
         $kelas = Kelas::all();
         
         return view('jadwal.create', compact('pengampu', 'ruang', 'hari', 'jam', 'kelas'));
+    }
+    public function edit($id)
+    {
+        $jadwal = JadwalKuliah::with(['pengampu.matakuliah', 'pengampu.dosen', 'ruang', 'hari', 'jam', 'kelas'])
+            ->findOrFail($id);
+        
+        $pengampu = Pengampu::with(['matakuliah', 'dosen'])->get();
+        $ruang = Ruang::all();
+        $hari = Hari::all();
+        $jam = Jam::all();
+        $kelas = Kelas::all();
+        
+        return view('jadwal.edit', compact('jadwal', 'pengampu', 'ruang', 'hari', 'jam', 'kelas'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'pengampu_id' => 'required',
+            'ruang_id' => 'required',
+            'hari_id' => 'required',
+            'jam_id' => 'required',
+            'kelas_id' => 'required',
+            'tahun_akademik' => 'required',
+        ]);
+
+        $jadwal = JadwalKuliah::findOrFail($id);
+        $jadwal->update($request->all());
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui!');
+    }
+    public function destroy($id)
+    {
+        $jadwal = JadwalKuliah::findOrFail($id);
+        $jadwal->delete();
+
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dihapus');
     }
 
     public function generateJadwal(Request $request)
@@ -105,6 +142,7 @@ class JadwalKuliahController extends Controller
                 }
             }
         }
+        
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil digenerate!');
 }
