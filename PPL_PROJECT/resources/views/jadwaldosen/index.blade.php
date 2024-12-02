@@ -50,7 +50,7 @@
                                         {{ $j->pengampu->matakuliah->nama ?? '-' }}
                                         ({{ $j->pengampu->matakuliah->sks ?? 0 }} SKS)
                                     </td>
-                                    <td>{{ $j->pengampu->dosen->nama ?? '-' }}</td>
+                                    <td>{{ $j->pengampu->dosen->pluck('nama')->implode(', ') }}</td>
                                     <td>{{ $j->ruang->nama_ruang ?? '-' }}</td>
                                     <td>{{ $j->kelas->nama_kelas ?? '-' }}</td>
                                 </tr>
@@ -63,6 +63,7 @@
                         </table>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>

@@ -12,7 +12,7 @@
             <select name="pengampu_id" id="pengampu_id" class="form-control" required>
                 @foreach($pengampu as $item)
                     <option value="{{ $item->id }}" {{ $item->id == $jadwal->pengampu_id ? 'selected' : '' }}>
-                        {{ $item->matakuliah->nama }} - {{ $item->dosen->nama }}
+                        {{ $item->matakuliah->nama }} - {{ $item->dosen->pluck('nama')->implode(', ') }}
                     </option>
                 @endforeach
             </select>
