@@ -5,13 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h3 class="mb-0">Tambah Jam Perkuliahan</h3>
-                        <a href="{{ route('jam.index') }}" class="btn btn-secondary">Kembali</a>
-                    </div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Tambah Jam Perkuliahan</h3>
+                    <a href="{{ route('jam.index') }}" class="btn btn-secondary">Kembali</a>
                 </div>
-
                 <div class="card-body">
                     @if (session('error'))
                         <div class="alert alert-danger">
@@ -86,6 +83,7 @@
         </div>
     </div>
 </div>
+@endsection
 
 @push('scripts')
 <script>
@@ -106,7 +104,7 @@
         }
 
         waktuShalatCheckbox.addEventListener('change', toggleJamSelesai);
-        toggle JamSelesai();
+        toggleJamSelesai();
     });
 </script>
 @endpush

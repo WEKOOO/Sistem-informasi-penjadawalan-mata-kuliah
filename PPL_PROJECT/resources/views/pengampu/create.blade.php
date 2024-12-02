@@ -1,4 +1,3 @@
-<!-- resources/views/mata-kuliah/create.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -34,18 +33,37 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label>Dosen</label>
-                            <select name="dosen_id" class="form-control @error('dosen_id') is-invalid @enderror">
-                                <option value="">Pilih Dosen</option>
+                            <label>Dosen 1</label>
+                            <select name="dosen1" class="form-control @error('dosen1') is-invalid @enderror">
+                                <option value="">Pilih Dosen 1</option>
                                 @foreach($dosens as $dosen)
                                     <option value="{{ $dosen->id }}">{{ $dosen->nama }}</option>
                                 @endforeach
                             </select>
-                            @error('dosen_id')
+                            @error('dosen1')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
                         </div>
-                        
+
+                        <div class="mb-3">
+                            <label>Dosen 2 (Opsional)</label>
+                            <select name="dosen2" class="form-control">
+                                <option value="">Pilih Dosen 2 (Tidak Wajib)</option>
+                                @foreach($dosens as $dosen)
+                                    <option value="{{ $dosen->id }}">{{ $dosen->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Dosen 3 (Opsional)</label>
+                            <select name="dosen3" class="form-control">
+                                <option value="">Pilih Dosen 3 (Tidak Wajib)</option>
+                                @foreach($dosens as $dosen)
+                                    <option value="{{ $dosen->id }}">{{ $dosen->nama }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="mb-3">
                             <label>Mata Kuliah</label>
@@ -60,6 +78,18 @@
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            <label>Kelas</label>
+                            <select name="kelas_id" class="form-control @error('kelas_id') is-invalid @enderror">
+                                <option value="">Pilih Kelas</option>
+                                @foreach($kelas as $k)
+                                    <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
+                                @endforeach
+                            </select>
+                            @error('kelas_id')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         <div class="mb-3">
                             <label>Tahun Akademik</label>
@@ -67,7 +97,6 @@
                             @error('tahun_akademik')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
-                        </div>
                         </div>
 
                         <div class="d-grid">

@@ -1,4 +1,3 @@
-<!-- resources/views/pengampu/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -35,53 +34,85 @@
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="dosen_id" class="form-label">Dosen</label>
-                            <select class="form-select @error('dosen_id') is-invalid @enderror" 
-                                    id="dosen_id" name="dosen_id">
-                                <option value="">Pilih Dosen</option>
+                            <label>Dosen 1</label>
+                            <select name="dosen1" class="form-control @error('dosen1') is-invalid @enderror">
+                                <option value="">Pilih Dosen 1</option>
                                 @foreach($dosens as $dosen)
                                     <option value="{{ $dosen->id }}" 
-                                        {{ old('dosen_id', $pengampu->dosen_id) == $dosen->id ? 'selected' : '' }}>
+                                        {{ isset($pengampu->dosens[0]) && $pengampu->dosens[0]->id == $dosen->id ? 'selected' : '' }}>
                                         {{ $dosen->nama }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('dosen_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                            @error('dosen1')
+                                <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label for="matakuliah_id" class="form-label">Mata Kuliah</label>
-                            <select class="form-select @error('matakuliah_id') is-invalid @enderror" 
-                                    id="matakuliah_id" name="matakuliah_id">
+                            <label>Dosen 2 (Opsional)</label>
+                            <select name="dosen2" class="form-control">
+                                <option value="">Pilih Dosen 2 (Tidak Wajib)</option>
+                                @foreach($dosens as $dosen)
+                                    <option value="{{ $dosen->id }}"
+                                        {{ isset($pengampu->dosens[1]) && $pengampu->dosens[1]->id == $dosen->id ? 'selected' : '' }}>
+                                        {{ $dosen->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Dosen 3 (Opsional)</label>
+                            <select name="dosen3" class="form-control">
+                                <option value="">Pilih Dosen 3 (Tidak Wajib)</option>
+                                @foreach($dosens as $dosen)
+                                    <option value="{{ $dosen->id }}"
+                                        {{ isset($pengampu->dosens[2]) && $pengampu->dosens[2]->id == $dosen->id ? 'selected' : '' }}>
+                                        {{ $dosen->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Mata Kuliah</label>
+                            <select name="matakuliah_id" class="form-control @error('matakuliah_id') is-invalid @enderror">
                                 <option value="">Pilih Mata Kuliah</option>
                                 @foreach($matakuliahs as $matakuliah)
                                     <option value="{{ $matakuliah->id }}" 
-                                        {{ old('matakuliah_id', $pengampu->matakuliah_id) == $matakuliah->id ? 'selected' : '' }}>
+                                        {{ $pengampu->matakuliah_id == $matakuliah->id ? 'selected' : '' }}>
                                         {{ $matakuliah->nama }}
                                     </option>
                                 @endforeach
                             </select>
                             @error('matakuliah_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="mb-3">
-                            <label for="tahun_akademik" class="form-label">Tahun Akademik</label>
-                            <input type="text" class="form-control @error('tahun_akademik') is-invalid @enderror" 
-                                   id="tahun_akademik" name="tahun_akademik" 
-                                   value="{{ old('tahun_akademik', $pengampu->tahun_akademik) }}" 
-                                   placeholder="Masukkan tahun akademik">
+                            <label>Kelas</label>
+                            <select name="kelas_id" class="form-control @error('kelas_id') is-invalid @enderror">
+                                <option value="">Pilih Kelas</option>
+                                @foreach($kelas as $k)
+                                    <option value="{{ $k->id }}" 
+                                        {{ $pengampu->kelas_id == $k->id ? 'selected' : '' }}>
+                                        {{ $k->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('kelas_id')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Tahun Akademik</label>
+                            <input type="text" name="tahun_akademik" class="form-control @error('tahun_akademik') is-invalid @enderror" 
+                                   value="{{ $pengampu->tahun_akademik }}">
                             @error('tahun_akademik')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -97,57 +128,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        
-        form.addEventListener('submit', function(e) {
-            let isValid = true;
-            
-            // Validasi Dosen
-            const dosen = document.getElementById('dosen_id');
-            if (!dosen.value) {
-                setInvalid(dosen, 'Dosen wajib dipilih');
-                isValid = false;
-            }
-            
-            // Validasi Mata Kuliah
-            const matakuliah = document.getElementById('matakuliah_id');
-            if (!matakuliah.value) {
-                setInvalid(matakuliah, 'Mata kuliah wajib dipilih');
-                isValid = false;
-            }
-            
-            
-            // Validasi Tahun Akademik
-            const tahunAkademik = document.getElementById('tahun_akademik');
-            if (!tahunAkademik.value.trim()) {
-                setInvalid(tahunAkademik, 'Tahun akademik wajib diisi');
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                e.preventDefault();
-            }
-        });
-        
-        function setInvalid(element, message) {
-            element.classList.add('is-invalid');
-            const feedback = element.nextElementSibling;
-            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                feedback.textContent = message;
-            }
-        }
-        
-        // Reset validation on input
-        const inputs = form.querySelectorAll('input, select');
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                this.classList.remove('is-invalid');
-            });
-        });
-    });
-</script>
-@endpush

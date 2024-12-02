@@ -47,7 +47,7 @@
                                             {{ $j->pengampu->matakuliah->nama }}
                                             ({{ $j->pengampu->matakuliah->sks }} SKS)
                                         </td>
-                                        <td>{{ $j->pengampu->dosen->nama }}</td>
+                                        <td>{{ $j->pengampu->dosen->pluck('nama')->implode(', ') }}</td>
                                         <td>{{ $j->ruang->nama_ruang }}</td>
                                         <td>{{ $j->kelas->nama_kelas }}</td>
                                         <td>

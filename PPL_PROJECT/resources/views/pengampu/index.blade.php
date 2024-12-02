@@ -28,6 +28,7 @@
                         <th>No</th>
                         <th>Dosen</th>
                         <th>Mata Kuliah</th>
+                        <th>Kelas</th>
                         <th>Tahun Akademik</th>
                         <th>Aksi</th>
                     </tr>
@@ -36,8 +37,13 @@
                     @foreach($pengampus as $index => $pengampu)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $pengampu->dosen->nama }}</td>
+                        <td>
+                            @foreach($pengampu->dosen as $dosen)
+                                {{ $dosen->nama }}{{ !$loop->last ? ', ' : '' }}
+                            @endforeach
+                        </td>
                         <td>{{ $pengampu->matakuliah->nama }}</td>
+                        <td>{{ $pengampu->Kelas->nama_kelas }}</td>
                         <td>{{ $pengampu->tahun_akademik }}</td>
                         <td>
                             <a href="{{ route('pengampu.edit', $pengampu->id) }}" class="btn btn-sm btn-warning">
