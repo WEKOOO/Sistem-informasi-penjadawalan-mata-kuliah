@@ -16,9 +16,9 @@
         <div class="col-md-3">
             <div class="card text-center p-3">
                 <div class="card-body">
-                    <i class="bi bi-person-fill text-success" style="font-size: 40px;"></i>
-                    <h5 class="card-title mt-2">Mahasiswa</h5>
-                    <a href="#" class="btn btn-outline-success mt-2">Lihat Data</a>
+                    <i class="bi bi-book-fill text-info" style="font-size: 40px;"></i>
+                    <h5 class="card-title mt-2">Mata Kuliah</h5>
+                    <a href="matakuliah" class="btn btn-outline-info mt-2">Lihat Data</a>
                 </div>
             </div>
         </div>

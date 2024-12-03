@@ -6,24 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('jam', function (Blueprint $table) {
             $table->id();
-            $table->string('jam_mulai');
-            $table->string('jam_selesai');
-            $table->foreignId('matakuliah_id')->constrained('matakuliah')->onDelete('cascade');
-            $table->string('waktu_shalat')->nullable();
+            $table->time('jam_mulai');         // Gunakan tipe time untuk presisi
+            $table->time('jam_selesai');       // Gunakan tipe time untuk presisi
+            $table->integer('durasi')->default(50); // Durasi dalam menit
+            $table->boolean('waktu_shalat')->default(false); // Gunakan boolean
             $table->timestamps();
         });        
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('jam');

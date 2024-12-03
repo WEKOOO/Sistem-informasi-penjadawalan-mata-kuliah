@@ -48,14 +48,17 @@
         }
 
         /* Sidebar Styling */
+
         .sidebar {
-            width: 250px;
+            width: 100px; /* Lebar tetap */
+            flex: 0 0 200px; /* Tetapkan lebar dan cegah perubahan */
             background-color: #343a40;
             color: #fff;
             min-height: 100vh;
             padding: 20px 15px;
             position: relative;
         }
+
         .sidebar a {
             display: block;
             color: #cfd8dc;
@@ -141,7 +144,6 @@
             <a href="kelas" class="sidebar-link {{ request()->is('kelas') ? 'active' : '' }}" id="kelas-link"><i class="bi bi-person-lines-fill"></i> Kelas</a>
             <a href="jam" class="sidebar-link {{ request()->is('jam') ? 'active' : '' }}" id="jam-link"><i class="bi bi-clock"></i> Waktu</a>
             <a href="pengampu" class="sidebar-link {{ request()->is('pengampu') ? 'active' : '' }}" id="pengampu-link"><i class="bi bi-person-check"></i> Pengampu</a>
-            <a href="#"><i class="bi bi-people"></i> Mahasiswa</a>
 
             <a href="jadwal" class="buat-jadwal"><i class="bi bi-calendar-event"></i> Buat Jadwal</a>
         </div>

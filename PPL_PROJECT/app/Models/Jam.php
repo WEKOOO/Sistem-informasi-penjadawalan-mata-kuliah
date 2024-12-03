@@ -1,22 +1,31 @@
 <?php
-// app/Models/Jam.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Jam extends Model
 {
     protected $table = 'jam';
-    protected $fillable = ['jam_mulai', 'jam_selesai', 'matakuliah_id', 'waktu_shalat'];
+    
+    protected $fillable = [
+        'jam_mulai', 
+        'jam_selesai', 
+        'durasi', 
+        'waktu_shalat'
+    ];
+
+    // Hapus relasi dengan matakuliah
+    // Gunakan durasi sebagai pengganti SKS dari mata kuliah
 
     public function getJamMulaiAttribute($value)
     {
-        return \Carbon\Carbon::createFromFormat('H:i:s', $value)->format('H:i');
+        return $value ? Carbon::parse($value)->format('H:i') : null;
     }
 
     public function getJamSelesaiAttribute($value)
     {
-        return \Carbon\Carbon::createFromFormat('H:i:s', $value)->format('H:i');
+        return $value ? Carbon::parse($value)->format('H:i') : null;
     }
 
     public function jadwalKuliah()
@@ -24,20 +33,31 @@ class Jam extends Model
         return $this->hasMany(JadwalKuliah::class);
     }
 
-    // Relasi ke Matakuliah
-    public function matakuliah()
-    {
-        return $this->belongsTo(Matakuliah::class);
-    }
-
+    // Tambahkan accessor untuk range waktu
     public function getRangeWaktuAttribute()
     {
         return $this->jam_mulai . ' - ' . $this->jam_selesai;
     }
 
-    // Accessor untuk mendapatkan SKS dari Matakuliah
-    public function getSksAttribute()
+    // Tambahkan mutator untuk jam_mulai
+    public function setJamMulaiAttribute($value)
     {
-        return $this->matakuliah ? $this->matakuliah->sks : null;
+        $this->attributes['jam_mulai'] = Carbon::parse($value)->format('H:i:s');
+    }
+
+    // Tambahkan mutator untuk jam_selesai
+    public function setJamSelesaiAttribute($value)
+    {
+        $this->attributes['jam_selesai'] = Carbon::parse($value)->format('H:i:s');
+    }
+    public static function getJamBySKS($sks)
+    {
+        // Durasi per SKS adalah 50 menit
+        $durasi_sks = $sks * 50;
+
+        // Ambil slot jam yang sesuai dengan durasi SKS
+        return self::where('durasi', '>=', $durasi_sks)
+                   ->where('waktu_shalat', false)
+                   ->get();
     }
 }

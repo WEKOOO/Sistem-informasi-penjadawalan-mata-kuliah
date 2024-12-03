@@ -8,17 +8,12 @@ use App\Models\Prodi;
 
 class MatakuliahController extends Controller
 {
-    // Menampilkan daftar matakuliah
     public function index(Request $request)
     {
-        $mataKuliah = MataKuliah::with('prodi')
-            ->select('matakuliah.*', 'prodi.nama_prodi')
-            ->join('prodi', 'matakuliah.prodi_id', '=', 'prodi.id')
-            ->get();
-
+        $search = $request->input('search');
+        $mataKuliah = MataKuliah::where('nama', 'like', '%' . $search . '%')->paginate(10); // Mengambil 10 data per halaman
         return view('matakuliah.index', compact('mataKuliah'));
     }
-
     
 
     // Menampilkan form untuk menambah matakuliah
@@ -69,6 +64,8 @@ class MatakuliahController extends Controller
         $prodi = Prodi::all();
         return view('matakuliah.edit', compact('mataKuliah', 'prodi'));
     }
+
+
 
     public function update(Request $request, $id)
     {

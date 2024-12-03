@@ -12,10 +12,33 @@ use Illuminate\Http\Request;
 
 class JadwalKuliahController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $jadwal = JadwalKuliah::with(['pengampu.matakuliah', 'pengampu.dosen', 'ruang', 'hari', 'jam', 'kelas'])
-            ->paginate(10);
+        $query = JadwalKuliah::with(['pengampu.matakuliah', 'pengampu.dosen', 'ruang', 'hari', 'jam', 'kelas']);
+
+        // Search functionality
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            $query->whereHas('pengampu.matakuliah', function($q) use ($searchTerm) {
+                $q->where('nama', 'like', '%' . $searchTerm . '%');
+            })->orWhereHas('pengampu.dosen', function($q) use ($searchTerm) {
+                $q->where('nama', 'like', '%' . $searchTerm . '%');
+            })->orWhereHas('ruang', function($q) use ($searchTerm) {
+                $q->where('nama_ruang', 'like', '%' . $searchTerm . '%');
+            })->orWhereHas('hari', function($q) use ($searchTerm) {
+                $q->where('nama_hari', 'like', '%' . $searchTerm . '%');    
+            })->orWhereHas('kelas', function($q) use ($searchTerm) {
+                $q->where('nama_kelas', 'like', '%' . $searchTerm . '%');
+            });
+            
+            
+        }
+
+       
+
+        $jadwal = $query->paginate(10);
+        $jadwal->appends($request->all()); // Preserve query parameters in pagination
+
         return view('jadwal.index', compact('jadwal'));
     }
 
@@ -29,6 +52,7 @@ class JadwalKuliahController extends Controller
         
         return view('jadwal.create', compact('pengampu', 'ruang', 'hari', 'jam', 'kelas'));
     }
+
     public function edit($id)
     {
         $jadwal = JadwalKuliah::with(['pengampu.matakuliah', 'pengampu.dosen', 'ruang', 'hari', 'jam', 'kelas'])
@@ -59,6 +83,7 @@ class JadwalKuliahController extends Controller
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui!');
     }
+
     public function destroy($id)
     {
         $jadwal = JadwalKuliah::findOrFail($id);
@@ -78,27 +103,34 @@ class JadwalKuliahController extends Controller
         
         $ruangList = Ruang::all();
         $hariList = Hari::all();
-        $jamList = Jam::all();
         $kelasList = Kelas::all();
+
+        // Track used days for each course to ensure variety
+        $courseScheduledDays = [];
 
         foreach ($pengampuList as $pengampu) {
             $jadwalTersedia = false;
             
-            // Hitung durasi waktu berdasarkan SKS
-            $sks = $pengampu->matakuliah->sks; // Misal, ambil SKS dari model matakuliah
-            $durasi = $sks * 50; // Hitung durasi dalam menit
-            $jamMulai = null;
+            // Ambil jam sesuai SKS mata kuliah
+            $jamList = Jam::getJamBySKS($pengampu->matakuliah->sks);
 
-            foreach ($hariList as $hari) {
+            // Shuffle hari list to add randomness to scheduling
+            $shuffledHariList = $hariList->shuffle();
+
+            foreach ($shuffledHariList as $hari) {
+                // Skip if this course has already been scheduled on this day
+                if (isset($courseScheduledDays[$pengampu->matakuliah->id]) && 
+                    in_array($hari->id, $courseScheduledDays[$pengampu->matakuliah->id])) {
+                    continue;
+                }
+
                 if ($jadwalTersedia) break;
                 
                 foreach ($jamList as $jam) {
-                    // Skip jika waktu shalat
-                    if ($jam->waktu_shalat) continue;
-
-                    // Hitung waktu selesai
-                    $jamMulai = $jam->id; // Asumsikan jam ini adalah jam mulai
-                    $jamSelesai = $jam->id + ($durasi / 60); // Menghitung jam selesai (asumsi jam dalam format jam ke-1, jam ke-2, dst.)
+                    $sks = $pengampu->matakuliah->sks;
+                    $durasi = $sks * 50; // Durasi dalam menit
+                    $jamMulai = $jam->id;
+                    $jamSelesai = $jamMulai + ceil($durasi / 60);
 
                     foreach ($ruangList as $ruang) {
                         // Cek kapasitas ruangan
@@ -125,10 +157,13 @@ class JadwalKuliahController extends Controller
                                         'pengampu_id' => $pengampu->id,
                                         'ruang_id' => $ruang->id,
                                         'hari_id' => $hari->id,
-                                        'jam_id' => $jamMulai, // Menggunakan jam mulai
+                                        'jam_id' => $jamMulai,
                                         'kelas_id' => $kelas->id,
                                         'tahun_akademik' => $request->tahun_akademik
                                     ]);
+                                    
+                                    // Track the day for this course
+                                    $courseScheduledDays[$pengampu->matakuliah->id][] = $hari->id;
                                     
                                     $jadwalTersedia = true;
                                     break;
@@ -145,5 +180,6 @@ class JadwalKuliahController extends Controller
         
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil digenerate!');
-}
+    }
+    
 }

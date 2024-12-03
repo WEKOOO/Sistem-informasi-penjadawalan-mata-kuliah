@@ -16,7 +16,7 @@
         </div>
 
         <!-- Tombol Tambah Data dan Search -->
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-3">
             <button class="btn btn-primary" onclick="window.location.href='{{ route('dosen.create') }}'">
                 + Tambah Data
             </button>
@@ -27,59 +27,99 @@
             </form>
         </div>
 
-        <!-- Slider Tabel -->
+        <!-- Tabel Data -->
         <div class="col-12">
-            <div id="tableSlider" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    @foreach($dosen->chunk(10) as $index => $chunk)
-                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>NIDN</th>
-                                    <th>Email</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($chunk as $i => $d)
-                                <tr>
-                                    <td>{{ $loop->iteration + $index * 10 }}</td>
-                                    <td>{{ $d->nama }}</td>
-                                    <td>{{ $d->nidn }}</td>
-                                    <td>{{ $d->email }}</td>
-                                    <td>
-                                        <a href="{{ route('dosen.edit', $d->id) }}" class="btn btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('dosen.destroy', $d->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus data?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @endforeach
+            @if($dosen->isEmpty())
+                <div class="alert alert-info text-center">
+                    Tidak ada data dosen yang tersedia.
                 </div>
-                <!-- Navigasi Slider -->
-                <div class="d-flex justify-content-center mt-3">
-                    <button class="btn btn-secondary me-2" type="button" data-bs-target="#tableSlider" data-bs-slide="prev">
-                        Sebelumnya
-                    </button>
-                    <button class="btn btn-secondary" type="button" data-bs-target="#tableSlider" data-bs-slide="next">
-                        Berikutnya
-                    </button>
+            @else
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NIDN</th>
+                            <th>Email</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($dosen as $index => $d)
+                        <tr>
+                            <td>{{ $index + 1 + ($dosen->currentPage() - 1) * $dosen->perPage() }}</td>
+                            <td>{{ $d->nama }}</td>
+                            <td>{{ $d->nidn }}</td>
+                            <td>{{ $d->email }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('dosen.edit', $d->id) }}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('dosen.destroy', $d->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin hapus data?')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+        </div>
+
+        <!-- Pagination -->
+        @if($dosen->isNotEmpty())
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted">
+                    Menampilkan {{ $dosen->firstItem() }} - {{ $dosen->lastItem() }} dari {{ $dosen->total() }} data
                 </div>
+                <nav aria-label="Navigasi Halaman">
+                    <ul class="pagination mb-0">
+                        {{-- Previous Page Link --}}
+                        @if ($dosen->onFirstPage())
+                            <li class="page-item disabled">
+                                <span class="page-link">Previous</span>
+                            </li>
+                        @else
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $dosen->previousPageUrl() }}">Previous</a>
+                            </li>
+                        @endif
+
+                        {{-- Page Numbers --}}
+                        @foreach(range(1, $dosen->lastPage()) as $page)
+                            @if($page == $dosen->currentPage())
+                                <li class="page-item active">
+                                    <span class="page-link">{{ $page }}</span>
+                                </li>
+                            @else
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ $dosen->url($page) }}">{{ $page }}</a>
+                                </li>
+                            @endif
+                        @endforeach
+
+                        {{-- Next Page Link --}}
+                        @if ($dosen->hasMorePages())
+                            <li class="page-item">
+                                <a class="page-link" href="{{ $dosen->nextPageUrl() }}">Next</a>
+                            </li>
+                        @else
+                            <li class="page-item disabled">
+                                <span class="page-link">Next</span>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection

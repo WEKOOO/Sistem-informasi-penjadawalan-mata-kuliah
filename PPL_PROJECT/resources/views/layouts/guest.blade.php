@@ -30,9 +30,8 @@
         .logo {
             width: 100px;
             height: 100px;
-            margin: 0 auto 30px;
+            margin: 0 auto ;
             background-color: #f0f0f0;
-            border: 1px solid #ddd;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -89,8 +88,9 @@
 <body>
     <div class="login-container">
         <div class="logo">
-            <span class="logo-x">×</span>
+            <img src="{{ asset('images/unib.png') }}" alt="Logo" style="height: 100px;">
         </div>
+        <h2 style="text-align: center;">SISTEM INFORMASI PENJADWALAN KULIAH</h2>        
 
         @if ($errors->any())
             <div class="alert">

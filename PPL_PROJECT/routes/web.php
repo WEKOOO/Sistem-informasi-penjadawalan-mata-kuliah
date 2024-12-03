@@ -55,6 +55,7 @@ Route::post('/jadwaldosen/copy', [JadwalDosenController::class, 'copyToJadwalDos
 
 Route::resource('jadwal', JadwalKuliahController::class);
 Route::post('jadwal/generate', [JadwalKuliahController::class, 'generateJadwal'])->name('jadwal.generate');
+Route::post('jadwal/store', [JadwalKuliahController::class, 'store'])->name('jadwal.store');
 Route::get('jadwal/{id}/edit', [JadwalKuliahController::class, 'edit'])->name('jadwal.edit');
 Route::put('jadwal/{id}', [JadwalKuliahController::class, 'update'])->name('jadwal.update');
 Route::delete('jadwal/{id}', [JadwalKuliahController::class, 'destroy'])->name('jadwal.destroy');

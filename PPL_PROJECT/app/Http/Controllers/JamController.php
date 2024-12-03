@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Jam;
-use App\Models\Matakuliah; // Tambahkan import untuk model Matakuliah
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -17,90 +15,72 @@ class JamController extends Controller
 
     public function create()
     {
-        $matakuliahList = Matakuliah::all(); // Ambil semua matakuliah untuk dropdown
-        return view('jam.create', compact('matakuliahList'));
+        return view('jam.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'jam_mulai' => 'required',
-            'matakuliah_id' => 'required|exists:matakuliah,id', // Validasi matakuliah_id
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'durasi' => 'nullable|integer|min:10|max:240',
             'waktu_shalat' => 'boolean'
         ]);
 
         try {
-            $jamMulai = $request->jam_mulai;
-            $matakuliah = Matakuliah::findOrFail($request->matakuliah_id); // Ambil matakuliah berdasarkan ID
-            $sks = $matakuliah->sks; // Ambil SKS dari matakuliah
+            $jamMulai = Carbon::parse($request->jam_mulai);
+            $jamSelesai = Carbon::parse($request->jam_selesai);
             
-            // Jika bukan waktu shalat, hitung jam selesai berdasarkan SKS
-            if (!$request->waktu_shalat) {
-                $durasiMenit = $sks * 50; // 1 SKS = 50 menit
-                $jamSelesai = Carbon::parse($jamMulai)->addMinutes($durasiMenit)->format('H:i');
-            } else {
-                // Jika waktu shalat, gunakan jam selesai yang diinput
-                $jamSelesai = $request->jam_selesai;
-            }
-
             Jam::create([
                 'jam_mulai' => $jamMulai,
                 'jam_selesai' => $jamSelesai,
-                'matakuliah_id' => $request->matakuliah_id, // Simpan matakuliah_id
-                'waktu_shalat' => $request->waktu_shalat
+                'durasi' => $jamMulai->diffInMinutes($jamSelesai),
+                'waktu_shalat' => $request->boolean('waktu_shalat', false)
             ]);
 
             return redirect()->route('jam.index')
-                             ->with('success', 'Data jam berhasil ditambahkan');
+                ->with('success', 'Data jam berhasil ditambahkan');
         } catch (\Exception $e) {
             return redirect()->back()
-                             ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
-                             ->withInput();
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
         }
     }
 
     public function edit($id)
     {
         $jam = Jam::findOrFail($id);
-        $matakuliahList = Matakuliah::all(); // Ambil semua matakuliah untuk dropdown
-        return view('jam.edit', compact('jam', 'matakuliahList'));
+        return view('jam.edit', compact('jam'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'jam_mulai' => 'required',
-            'matakuliah_id' => 'required|exists:matakuliah,id', // Validasi matakuliah_id
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            'durasi' => 'nullable|integer|min:10|max:240',
             'waktu_shalat' => 'boolean'
         ]);
 
         try {
             $jam = Jam::findOrFail($id);
-            $jamMulai = $request->jam_mulai;
-            $matakuliah = Matakuliah::findOrFail($request->matakuliah_id); // Ambil matakuliah berdasarkan ID
-            $sks = $matakuliah->sks; // Ambil SKS dari matakuliah
             
-            // Jika bukan waktu shalat, hitung jam selesai berdasarkan SKS
-            if (!$request->waktu_shalat) {
-                $durasiMenit = $sks * 50; // 1 SKS = 50 menit
-                $jamSelesai = Carbon::parse($jamMulai)->addMinutes($durasiMenit)->format('H:i');
-            } else {
-                $jamSelesai = $request->jam_selesai;
-            }
+            $jamMulai = Carbon::parse($request->jam_mulai);
+            $jamSelesai = Carbon::parse($request->jam_selesai);
 
             $jam->update([
                 'jam_mulai' => $jamMulai,
                 'jam_selesai' => $jamSelesai,
-                'matakuliah_id' => $request->matakuliah_id, // Simpan matakuliah_id
-                'waktu_shalat' => $request->waktu_shalat
+                'durasi' => $jamMulai->diffInMinutes($jamSelesai),
+                'waktu_shalat' => $request->boolean('waktu_shalat', false)
             ]);
 
             return redirect()->route('jam.index')
-                             ->with('success', 'Data jam berhasil diperbarui');
+                ->with('success', 'Data jam berhasil diperbarui');
         } catch (\Exception $e) {
             return redirect()->back()
-                             ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
-                             ->withInput();
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
         }
     }
 
@@ -112,15 +92,15 @@ class JamController extends Controller
             // Cek apakah jam sudah digunakan di jadwal
             if ($jam->jadwalKuliah()->exists()) {
                 return redirect()->back()
-                                 ->with('error', 'Jam ini tidak dapat dihapus karena sudah digunakan dalam jadwal');
+                    ->with('error', 'Jam ini tidak dapat dihapus karena sudah digunakan dalam jadwal');
             }
 
             $jam->delete();
             return redirect()->route('jam.index')
-                             ->with('success', 'Data jam berhasil dihapus');
+                ->with('success', 'Data jam berhasil dihapus');
         } catch (\Exception $e) {
             return redirect()->back()
-                             ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

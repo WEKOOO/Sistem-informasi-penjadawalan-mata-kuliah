@@ -11,9 +11,21 @@ use Illuminate\Support\Facades\DB;
 
 class PengampuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Pengampu::query();
+        
+        if ($request->has('search')) {
+            $query->whereHas('matakuliah', function($q) use ($request) {
+                $q->where('nama', 'like', '%' . $request->search . '%');
+            })->orWhereHas('Kelas', function($q) use ($request) {
+                $q->where('nama_kelas', 'like', '%' . $request->search . '%');
+            })->orWhere('tahun_akademik', 'like', '%' . $request->search . '%');
+        }
+        
         $pengampus = Pengampu::with('dosen', 'matakuliah')->get();
+        $pengampus = $query->with(['dosen', 'matakuliah', 'Kelas'])->paginate(10);
+        
         return view('pengampu.index', compact('pengampus'));
     }
 

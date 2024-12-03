@@ -7,13 +7,18 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="float-left">Jadwal Kuliah</h3>
-                    <div class="float-right">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <form action="{{ route('jadwal.generate') }}" method="POST" class="d-inline">
                             @csrf
                             <input type="text" name="tahun_akademik" placeholder="Tahun Akademik" required class="form-control-sm mr-2" style="display:inline-block; width:auto;">
                             <button type="submit" class="btn btn-primary btn-sm">Generate Jadwal</button>
                         </form>
-                    </div>
+                    
+                        <form action="{{ route('jadwal.index') }}" method="GET" class="d-flex">
+                            <input type="text" name="search" class="form-control" placeholder="Pencarian..." value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-primary ms-2">Search</button>
+                        </form>
+                    
                 </div>
 
                 <div class="card-body">
@@ -70,6 +75,7 @@
                     @endif
                 </div>
 
+
                 @if($jadwal->isNotEmpty())
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
@@ -119,5 +125,6 @@
         </div>
     </div>
 </div>
+
 
 @endsection

@@ -9,9 +9,18 @@ use Illuminate\Http\Request;
 class DosenController extends Controller
 {
     // Tampilkan data dosen
-    public function index()
+    public function index(Request $request)
     {
+        $query = Dosen::query();
+        
+        if ($request->has('search')) {
+            $query->where('nama', 'like', '%' . $request->search . '%')
+                ->orWhere('nidn', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
         $dosen = Dosen::with('prodi')->get(); // Ambil data dosen dengan relasi prodi
+        $dosen = $query->paginate(10); // 10 items per page
+       
         return view('dosen.index', compact('dosen'));
     }
 
