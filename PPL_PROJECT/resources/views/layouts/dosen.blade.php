@@ -117,7 +117,7 @@
             <i class="bi bi-person-circle"></i>
             <div class="dropdown">
                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Administrator
+                    Mahasiswa
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>

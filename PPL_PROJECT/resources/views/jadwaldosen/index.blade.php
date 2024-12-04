@@ -6,19 +6,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3>Jadwal Kuliah</h3>
-                    <form action="{{ route('jadwal.generate') }}" method="POST" class="form-inline">
-                        @csrf
-                        <div class="form-group mr-2">
-                            <input
-                                type="text"
-                                name="tahun_akademik"
-                                class="form-control"
-                                placeholder="Tahun Akademik"
-                                required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Generate Jadwal</button>
-                    </form>
+                    <h3>Jadwal Dosen</h3>
                 </div>
 
                 <div class="card-body">
@@ -41,15 +29,11 @@
                                     <td>
                                         @if ($j->jam)
                                             {{ $j->jam->jam_mulai ?? '-' }} - {{ $j->jam->jam_selesai ?? '-' }}
-                                            ({{ $j->pengampu->matakuliah->sks * 50 ?? 0 }} menit)
                                         @else
                                             -
                                         @endif
                                     </td>
-                                    <td>
-                                        {{ $j->pengampu->matakuliah->nama ?? '-' }}
-                                        ({{ $j->pengampu->matakuliah->sks ?? 0 }} SKS)
-                                    </td>
+                                    <td>{{ $j->pengampu->matakuliah->nama ?? '-' }}</td>
                                     <td>{{ $j->pengampu->dosen->pluck('nama')->implode(', ') }}</td>
                                     <td>{{ $j->ruang->nama_ruang ?? '-' }}</td>
                                     <td>{{ $j->kelas->nama_kelas ?? '-' }}</td>
