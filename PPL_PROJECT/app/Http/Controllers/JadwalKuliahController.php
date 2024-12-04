@@ -30,11 +30,7 @@ class JadwalKuliahController extends Controller
             })->orWhereHas('kelas', function($q) use ($searchTerm) {
                 $q->where('nama_kelas', 'like', '%' . $searchTerm . '%');
             });
-            
-            
         }
-
-       
 
         $jadwal = $query->paginate(10);
         $jadwal->appends($request->all()); // Preserve query parameters in pagination
@@ -77,10 +73,17 @@ class JadwalKuliahController extends Controller
             'kelas_id' => 'required',
             'tahun_akademik' => 'required',
         ]);
-
+    
         $jadwal = JadwalKuliah::findOrFail($id);
-        $jadwal->update($request->all());
-
+        $jadwal->update($request->only([
+            'pengampu_id',
+            'ruang_id',
+            'hari_id',
+            'jam_id',
+            'kelas_id',
+            'tahun_akademik'
+        ]));
+    
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui!');
     }
 

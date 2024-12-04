@@ -5,7 +5,7 @@
     <div class="row g-4">
         <!-- Judul Tabel -->
         <div class="col-12">
-            <h4 class="title-with-underline">Tabel Data Kelas</h4>
+            <h4 class="title">Data Kelas</h4>
         </div>
         
         <!-- Tombol Tambah Data dan Search -->
@@ -22,13 +22,14 @@
         
         <!-- Tabel Data -->
         <div class="col-12">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Nama Kelas</th>
-                        <th>Prodi</th>
-                        <th>Aksi</th>
+                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">No</th>
+                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Nama Kelas</th>
+                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Prodi</th>
+                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Aksi</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +39,7 @@
                         <td>{{ $d->nama_kelas }}</td>
                         <td>{{ $d->prodi->nama_prodi }}</td>
                         <td>
-                            <a href="{{ route('kelas.edit', $d->id) }}" class="btn btn-sm ">
+                            <a href="{{ route('kelas.edit', $d->id) }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('kelas.destroy', $d->id) }}" method="POST" class="d-inline">

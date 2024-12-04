@@ -37,11 +37,11 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>NIDN</th>
-                            <th>Email</th>
-                            <th>Aksi</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">No</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Nama</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">NIDN</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Email</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -4,8 +4,8 @@
 <div class="container-fluid">
     <div class="row g-4">
         <!-- Judul Tabel -->
-        <div class="col-12">
-            <h4 class="title-with-underline">Tabel Data Pengampu</h4>
+        <div class=" font-weight-bold col-12">
+            <h4 class="title">Data Pengampu</h4>
         </div>
         
         <!-- Tombol Tambah Data dan Search -->
@@ -30,12 +30,12 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Dosen</th>
-                            <th>Mata Kuliah</th>
-                            <th>Kelas</th>
-                            <th>Tahun Akademik</th>
-                            <th>Aksi</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">No</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Dosen</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Mata Kuliah</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Kelas</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Tahun Akademik</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,9 +44,10 @@
                             <td>{{ $index + 1 + ($pengampus->currentPage() - 1) * $pengampus->perPage() }}</td>
                             <td>
                                 @foreach($pengampu->dosen as $dosen)
-                                    {{ $dosen->nama }}{{ !$loop->last ? ', ' : '' }}
+                                    {{ $dosen->nama }}<br>
                                 @endforeach
                             </td>
+                            
                             <td>{{ $pengampu->matakuliah->nama }}</td>
                             <td>{{ $pengampu->Kelas->nama_kelas }}</td>
                             <td>{{ $pengampu->tahun_akademik }}</td>

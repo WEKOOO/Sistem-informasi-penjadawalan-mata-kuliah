@@ -45,20 +45,29 @@
         .layout {
             display: flex;
             margin-top: 75px; /* Space for the fixed header */
+            height: calc(100vh - 75px); /* Adjust height to fill remaining viewport */
+            overflow: hidden; /* Prevent overall layout from scrolling */
         }
-
-        /* Sidebar Styling */
 
         .sidebar {
-            width: 100px; /* Lebar tetap */
-            flex: 0 0 200px; /* Tetapkan lebar dan cegah perubahan */
+            width: 200px;
             background-color: #343a40;
             color: #fff;
-            min-height: 100vh;
             padding: 20px 15px;
-            position: relative;
+            position: fixed; /* Make sidebar fixed */
+            top: 75px; /* Align with header */
+            bottom: 0;
+            overflow-y: auto; /* Allow sidebar to scroll if content is too long */
         }
 
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: #f8f9fa;
+            margin-left: 200px; /* Match sidebar width */
+            overflow-y: auto; /* Enable scrolling for main content */
+            height: calc(100vh - 75px); /* Full height minus header */
+        }
         .sidebar a {
             display: block;
             color: #cfd8dc;
@@ -80,14 +89,6 @@
             margin-right: 10px;
         }
 
-        /* Main Content Styling */
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            background-color: #f8f9fa;
-            position: relative;
-        }
-
         /* Card Styling */
         .card {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -101,9 +102,9 @@
             }
         }
         .title-with-underline {
-            border-bottom: 2px solid #000; /* Ganti #000 dengan warna yang diinginkan */
-            width: 27%; /* Agar border hanya muncul di bawah teks */
-            padding-bottom: 5px; /* Jarak antara teks dan garis */
+            border-bottom: 2px solid #000;
+            width: 27%;
+            padding-bottom: 5px;
         }
 
     </style>
@@ -123,10 +124,7 @@
                     Administrator
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    <li><a class="dropdown-item" href="#" id="logout-button">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -152,7 +150,6 @@
         <div class="main-content">
             @yield('content')
 
-            <!-- resources/views/layouts/app.blade.php (di bagian content) -->
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -164,26 +161,33 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', function(event) {
-                // Hapus class 'active' dari semua tautan
-                document.querySelectorAll('.sidebar-link').forEach(item => {
-                    item.classList.remove('active');
-                });
-                // Tambahkan class 'active' pada tautan yang diklik
-                this.classList.add('active');
 
-                // Navigasi ke halaman yang sesuai
-                window.location.href = this.getAttribute('href');
-            });
+    <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin logout dari sistem?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <a href="login" class="btn btn-danger">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            var logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+            logoutModal.show();
         });
     </script>
-
-    <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

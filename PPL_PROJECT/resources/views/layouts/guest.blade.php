@@ -1,130 +1,181 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Login Admin') }}</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Penjadwalan Mata Kuliah</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(to bottom right, #f0f8ff, #e0f2f1, #f5f5f5);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background-color: rgba(120, 205, 251, 0.7); /* Warna dasar dengan transparansi */
-            backdrop-filter: blur(10px); /* Efek blur */
+            overflow: hidden;
         }
 
         .login-container {
+            background-color: #fff;
+            border: 1px solid #e0f2f1;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 32px;
             width: 100%;
             max-width: 400px;
-            padding: 20px;
-            
-            background-color: #f0f0f0;
         }
 
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto ;
-            background-color: #f0f0f0;
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header .calendar-icon {
+            font-size: 48px;
+            color: #1e88e5;
+            animation: pulse 2s infinite;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0d47a1;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 8px;
         }
 
-        .logo-x {
-            font-size: 40px;
-            color: #ccc;
+        .header p {
+            color: #546e7a;
+            font-size: 14px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            position: relative;
+            margin-bottom: 16px;
         }
 
-        input {
+        .form-group .icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #90a4ae;
+            transition: color 0.3s;
+        }
+
+        .form-group input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 12px 40px;
+            font-size: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e88e5;
+            background-color: #fff;
+        }
+
+        .form-group input:focus + .icon {
+            color: #1e88e5;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .form-actions label {
+            color: #546e7a;
             font-size: 14px;
         }
 
-        input::placeholder {
-            color: #999;
+        .form-actions a {
+            color: #1e88e5;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
         }
 
-        .login-button {
-            width: 100%;
-            padding: 10px;
-            background-color: #2196F3;
-            color: white;
+        .form-actions a:hover {
+            color: #0d47a1;
+        }
+
+        .submit-button {
+            background-color: #1e88e5;
+            color: #fff;
+            margin: 1vh 5vh 1vh 10vh;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
-            text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        .login-button:hover {
-            background-color: #1976D2;
+        .submit-button:hover {
+            background-color: #0d47a1;
+            transform: scale(1.05);
         }
 
-        .alert {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
+        .submit-button .icon {
+            margin-left: 8px;
+            animation: rotate 2s infinite linear;
+        }
+
+        .footer {
+            text-align: center;
+            color: #90a4ae;
+            font-size: 12px;
+            margin-top: 16px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">
-            <img src="{{ asset('images/unib.png') }}" alt="Logo" style="height: 100px;">
+        <div class="header">
+            <div class="calendar-icon">
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+            <h2>
+                <i class="fas fa-clock"></i>
+                Sistem Penjadwalan
+            </h2>
+            <p>Portal Jadwal Mata Kuliah</p>
         </div>
-        <h2 style="text-align: center;">SISTEM INFORMASI PENJADWALAN KULIAH</h2>        
 
-        @if ($errors->any())
-            <div class="alert">
-                {{ $errors->first() }}
-            </div>
-        @endif
+        @yield('content')
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div class="form-group">
-                <input 
-                    type="text" 
-                    name="email" 
-                    value="{{ old('email') }}" 
-                    placeholder="Username"
-                    required 
-                    autofocus
-                >
-            </div>
-
-            <div class="form-group">
-                <input 
-                    type="password" 
-                    name="password" 
-                    placeholder="Password"
-                    required
-                >
-            </div>
-
-            <button type="submit" class="login-button">
-                Login
-            </button>
-        </form>
+        <div class="footer">
+            © 2024 Sistem Informasi Penjadwalan Mata Kuliah
+        </div>
     </div>
 </body>
 </html>

@@ -31,13 +31,13 @@
                             <table class="table table-bordered table-striped" id="jadwalTable">
                                 <thead>
                                     <tr>
-                                        <th>Hari</th>
-                                        <th>Jam</th>
-                                        <th>Mata Kuliah</th>
-                                        <th>Dosen</th>
-                                        <th>Ruang</th>
-                                        <th>Kelas</th>
-                                        <th>Aksi</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Hari</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Jam</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Mata Kuliah</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Dosen</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Ruang</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Kelas</th>
+                                        <th class="fw-bold" style="color: black; background-color: #d9edfc;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -52,7 +52,11 @@
                                             {{ $j->pengampu->matakuliah->nama }}
                                             ({{ $j->pengampu->matakuliah->sks }} SKS)
                                         </td>
-                                        <td>{{ $j->pengampu->dosen->pluck('nama')->implode(', ') }}</td>
+                                        <td>
+                                            @foreach ($j->pengampu->dosen as $dosen)
+                                                {{ $dosen->nama }}<br>
+                                            @endforeach
+                                        </td>
                                         <td>{{ $j->ruang->nama_ruang }}</td>
                                         <td>{{ $j->pengampu->kelas->nama_kelas }}</td>
                                         <td>
@@ -79,7 +83,10 @@
                 @if($jadwal->isNotEmpty())
                 <div class="card-footer">
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">Total Jadwal: {{ $jadwal->total() }}</span>
+                        <div>
+                            Menampilkan {{ $jadwal->firstItem() }} - {{ $jadwal->lastItem() }} 
+                            dari {{ $jadwal->total() }} data
+                        </div>
                         <nav aria-label="Page navigation">
                             <ul class="pagination mb-0">
                                 {{-- Previous Page Link --}}

@@ -11,34 +11,25 @@ class JadwalDosenController extends Controller
      * Menampilkan semua data jadwal kuliah.
      */
     public function index(Request $request)
-    {
-        // Ambil kata kunci pencarian dari query string
-        $search = $request->input('search');
+{
+    $search = $request->input('search');
+    
+    $jadwalKuliah = JadwalKuliah::when($search, function($query) use ($search) {
+        $query->whereHas('pengampu.matakuliah', function($q) use ($search) {
+            $q->where('nama', 'like', '%'.$search.'%');
+        })->orWhereHas('pengampu.dosen', function($q) use ($search) {
+            $q->where('nama', 'like', '%'.$search.'%');
+        })->orWhereHas('ruang', function($q) use ($search) {
+            $q->where('nama_ruang', 'like', '%' . $search . '%');
+        })->orWhereHas('hari', function($q) use ($search) {
+            $q->where('nama_hari', 'like', '%' . $search. '%');    
+        })->orWhereHas('kelas', function($q) use ($search) {
+            $q->where('nama_kelas', 'like', '%' . $search . '%');
+        });
+    })->paginate(10);
 
-        // Ambil data dari tabel jadwal_kuliah dengan relasi yang diperlukan
-        $jadwalKuliah = JadwalKuliah::with([
-            'hari',
-            'jam',
-            'pengampu.matakuliah',
-            'pengampu.dosen',
-            'ruang',
-            'kelas',
-        ])
-        ->when($search, function ($query, $search) {
-            // Filter data berdasarkan pencarian
-            $query->whereHas('pengampu.dosen', function ($query) use ($search) {
-                $query->where('nama', 'like', "%{$search}%");
-            })
-            ->orWhereHas('pengampu.matakuliah', function ($query) use ($search) {
-                $query->where('nama', 'like', "%{$search}%");
-            });
-        })
-        ->paginate(10); // Gunakan pagination dengan 10 item per halaman
-
-        // Return data ke view
-        return view('jadwaldosen.index', compact('jadwalKuliah', 'search'));
-    }
-
+    return view('jadwaldosen.index', compact('jadwalKuliah', 'search'));
+}
 
     /**
      * Menyalin data dari tabel jadwal_kuliah ke tabel jadwal_dosen.

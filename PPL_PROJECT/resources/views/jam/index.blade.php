@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container">
-    <h1>Daftar Jam</h1>
+    <!-- Judul Tabel -->
+    <div class="col-12">
+        <h4 class="title">Data Jam</h4>
+    </div>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -13,15 +16,16 @@
         </div>
     @endif
     <a href="{{ route('jam.create') }}" class="btn btn-primary mb-3">Tambah Jam</a>
-    <table class="table table-bordered">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>No</th>
-                <th>Jam Mulai</th>
-                <th>Jam Selesai</th>
-                <th>Durasi (Menit)</th>
-                <th>Waktu Shalat</th>
-                <th>Aksi</th>
+                <th class="fw-bold" style="color: black; background-color: #d9edfc;">No</th>
+                <th class="fw-bold" style="color: black; background-color: #d9edfc;">Jam Mulai</th>
+                <th class="fw-bold" style="color: black; background-color: #d9edfc;">Jam Selesai</th>
+                <th class="fw-bold" style="color: black; background-color: #d9edfc;">Durasi (menit)</th>
+                <th class="fw-bold" style="color: black; background-color: #d9edfc;">Waktu Shalat</th>
+                <th class="fw-bold" style="color: black; background-color: #d9edfc;">Aksi</th>
+
             </tr>
         </thead>
         <tbody>
@@ -33,11 +37,11 @@
                     <td>{{ $jam->durasi }}</td>
                     <td>{{ $jam->waktu_shalat ? 'Ya' : 'Tidak' }}</td>
                     <td>
-                        <a href="{{ route('jam.edit', $jam->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('jam.edit', $jam->id) }}" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i></a>
                         <form action="{{ route('jam.destroy', $jam->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jam ini?')">Hapus</button>
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus jam ini?')"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>

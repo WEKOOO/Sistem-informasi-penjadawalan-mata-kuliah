@@ -42,4 +42,8 @@ class JadwalKuliah extends Model
     {
         return $this->hasMany(JadwalDosen::class);
     }
+    public function jadwalMahasiswa()
+    {
+        return $this->hasMany(JadwalMahasiswa::class);
+    }
 }

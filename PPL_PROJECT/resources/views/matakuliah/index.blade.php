@@ -5,7 +5,7 @@
     <div class="row g-4">
         <!-- Judul Tabel -->
         <div class="col-12">
-            <h4 class="title-with-underline">Tabel Data Mata Kuliah</h4>
+            <h4 class="title">Data Mata Kuliah</h4>
         </div>
         
         <!-- Tombol Tambah Data dan Search -->
@@ -30,13 +30,13 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Kode MK</th>
-                            <th>Nama</th>
-                            <th>SKS</th>
-                            <th>Semester</th>
-                            <th>Prodi</th>
-                            <th>Aksi</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">No</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Kode MK</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Nama</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">SKS</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Semester</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Prodi</th>
+                            <th class="fw-bold" style="color: black; background-color: #d9edfc;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
