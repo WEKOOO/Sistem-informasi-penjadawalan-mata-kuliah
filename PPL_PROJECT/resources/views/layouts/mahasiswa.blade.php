@@ -117,7 +117,7 @@
             <i class="bi bi-person-circle"></i>
             <div class="dropdown">
                 <button class="btn btn-outline-primary dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dosen
+                    Mahasiswa
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -133,7 +133,7 @@
     <div class="layout">
         <!-- Sidebar -->
         <div class="sidebar">
-            <a href="jadwaldosen" class="buat-jadwal"><i class="bi bi-calendar-event"></i> Buat Jadwal</a>
+            <a href="jadwalmahasiswa" class="buat-jadwal"><i class="bi bi-calendar-event"></i>Jadwal Kuliah</a>
         </div>
 
         <!-- Main Content -->

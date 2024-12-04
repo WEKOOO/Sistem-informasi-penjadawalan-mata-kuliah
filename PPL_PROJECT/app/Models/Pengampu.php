@@ -26,4 +26,7 @@ class Pengampu extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+    public function jadwalmahasiswa(){
+        return $this->hasMany(JadwalMahasiswa::class, 'pengampu_id');
+    }
 }

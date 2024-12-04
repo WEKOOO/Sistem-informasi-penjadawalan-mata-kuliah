@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\JadwalDosenController;
+use App\Http\Controllers\JadwalMahasiswaController;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index']);
@@ -35,6 +36,8 @@ Route::get('dashboard-dosen', function () {
     return view('dashboard-dosen');
 });
 
+
+
 // Resource routes
 Route::resource('matakuliah', MataKuliahController::class);
 Route::resource('dosen', DosenController::class);
@@ -52,6 +55,8 @@ Route::resource('pengampu', PengampuController::class)->parameters([
 
 Route::get('/jadwaldosen', [JadwalDosenController::class, 'index'])->name('jadwaldosen.index');
 Route::post('/jadwaldosen/copy', [JadwalDosenController::class, 'copyToJadwalDosen'])->name('jadwaldosen.copy');
+
+Route::get('/jadwalmahasiswa', [JadwalMahasiswaController::class, 'index'])->name('jadwalmahasiswa.index');
 
 Route::resource('jadwal', JadwalKuliahController::class);
 Route::post('jadwal/generate', [JadwalKuliahController::class, 'generateJadwal'])->name('jadwal.generate');

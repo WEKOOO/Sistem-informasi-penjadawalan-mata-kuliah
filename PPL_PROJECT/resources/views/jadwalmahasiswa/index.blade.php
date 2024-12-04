@@ -1,4 +1,4 @@
-@extends('layouts.dosen')
+@extends('layouts.mahasiswa')
 
 @section('content')
 <div class="container">
@@ -6,11 +6,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3>Jadwal Dosen</h3>
-                    <form action="{{ route('jadwaldosen.index') }}" method="GET" class="form-inline">
-                        <input type="text" name="search" class="form-control mr-2" placeholder="Cari Dosen/Mata Kuliah" value="{{ $search ?? '' }}">
-                        <button type="submit" class="btn btn-primary">Cari</button>
-                    </form>
+                    <h3>Jadwal Mahasiswa</h3>
                 </div>
 
                 <div class="card-body">
@@ -50,19 +46,8 @@
                             </tbody>
                         </table>
                     </div>
-
-                    {{-- Pagination --}}
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>
-                            Menampilkan {{ $jadwalKuliah->firstItem() }} - {{ $jadwalKuliah->lastItem() }}
-                            dari {{ $jadwalKuliah->total() }} data
-                        </div>
-                        <div>
-                            {{ $jadwalKuliah->appends(['search' => $search])->links() }}
-                        </div>
-                    </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
