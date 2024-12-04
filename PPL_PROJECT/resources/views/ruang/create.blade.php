@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Tambah Data Program Studi</h5>
+                    <h5 class="mb-0">Tambah Data Ruangan</h5>
                     <a href="{{ route('ruang.index') }}" class="btn btn-secondary">
                         Kembali
                     </a>
@@ -34,8 +34,8 @@
                         @csrf
                         <div class="mb-3">
                             <label for="nama_ruang" class="form-label">Ruangan</label>
-                            <input type="text" class="form-control @error('nama_ruang') is-invalid @enderror" 
-                                   id="nama_ruang" name="nama_ruang" value="{{ old('nama_ruang') }}" 
+                            <input type="text" class="form-control @error('nama_ruang') is-invalid @enderror"
+                                   id="nama_ruang" name="nama_ruang" value="{{ old('nama_ruang') }}"
                                    placeholder="Masukkan ruangan">
                             @error('nama_ruang')
                                 <div class="invalid-feedback">
@@ -46,7 +46,7 @@
 
                         <div class="col-md-6">
                             <label for="kapasitas" class="form-label">Kapasitas Ruangan</label>
-                            <select class="form-select @error('kapasitas') is-invalid @enderror" 
+                            <select class="form-select @error('kapasitas') is-invalid @enderror"
                                     id="kapasitas" name="kapasitas">
                                 <option value="">Pilih kapasitas</option>
                                 @for($i = 1; $i <= 150; $i++)

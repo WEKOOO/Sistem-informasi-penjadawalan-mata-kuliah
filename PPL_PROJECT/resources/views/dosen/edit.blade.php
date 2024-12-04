@@ -7,7 +7,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Edit Data Mata Kuliah</h5>
+                    <h5 class="mb-0">Edit Data Dosen</h5>
                     <a href="{{ route('dosen.index') }}" class="btn btn-secondary">
                         Kembali
                     </a>

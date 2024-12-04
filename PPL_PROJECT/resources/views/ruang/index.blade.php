@@ -5,9 +5,9 @@
     <div class="row g-4">
         <!-- Judul Tabel -->
         <div class="col-12">
-            <h4 class="title">Data Ruang</h4>
+            <h4 class="title">Data Ruangan</h4>
         </div>
-        
+
         <!-- Tombol Tambah Data dan Search -->
         <div class="d-flex justify-content-between align-items-center">
             <button class="btn btn-primary" onclick="window.location.href='{{ route('ruang.create') }}'">
@@ -19,7 +19,7 @@
                 <button type="submit" class="btn btn-primary ms-2">Cari</button>
             </form>
         </div>
-        
+
         <!-- Tabel Data -->
         <div class="col-12">
             <table class="table table-bordered table-striped"> <!-- Tambahkan kelas table-striped -->
