@@ -88,7 +88,7 @@
         .sidebar a i {
             margin-right: 10px;
         }
-       
+
 
         /* Card Styling */
         .card {
@@ -135,7 +135,7 @@
     <div class="layout">
         <!-- Sidebar -->
         <div class="sidebar">
-            <a href="jadwaldosen" class="buat-jadwal"><i class="bi bi-calendar-event"></i> Buat Jadwal</a>
+            <a href="jadwaldosen" class="buat-jadwal"><i class="bi bi-calendar-event"></i>Jadwal Dosen</a>
         </div>
 
         <!-- Main Content -->

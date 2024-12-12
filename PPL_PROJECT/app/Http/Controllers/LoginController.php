@@ -28,12 +28,12 @@ class LoginController extends Controller
                 case 'admin':
                     return redirect('/dashboard'); // Halaman admin
                 case 'dosen':
-                    return redirect('/dashboard-dosen'); // Halaman dosen
+                    return redirect('/jadwaldosen'); // Halaman dosen
                 case 'mahasiswa':
-                    return redirect('/dashboard-mahasiswa'); // Halaman mahasiswa
+                    return redirect('/jadwalmahasiswa'); // Halaman mahasiswa
                 default:
                     Auth::logout(); // Jika role tidak valid, logout pengguna
-                    return redirect('/login')->withErrors(['login' => 'Role tidak dikenali.']);
+                    return redirect('/')->withErrors(['login' => 'Role tidak dikenali.']);
             }
         }
 

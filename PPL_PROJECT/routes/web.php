@@ -35,6 +35,9 @@ Route::get('dashboard', function () {
 Route::get('dashboard-dosen', function () {
     return view('dashboard-dosen');
 });
+Route::get('dashboard-mahasiswa', function () {
+    return view('dashboard-mahasiswa');
+});
 
 
 
@@ -78,7 +81,13 @@ Route::post('/login', [LoginController::class, 'login']);
 // login
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
+
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
 Route::post('/user/{id}/update-password', [UserController::class, 'updatePassword'])->name('user.updatePassword');
+
+Route::post('/', [LoginController::class, 'login']);
+// login
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login.form');
+Route::post('/', [LoginController::class, 'login'])->name('login');
